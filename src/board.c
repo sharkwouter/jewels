@@ -5,7 +5,6 @@
 #include <string.h>
 
 void fill(jewel (*jewels)[HEIGHT]) {
-    printf("Hi!\n");
     while(containsEmpty(jewels)) {
         dropJewels(jewels);
         getMatches(jewels, NULL);
@@ -101,7 +100,6 @@ int containsEmpty(jewel (*jewels)[HEIGHT]) {
     for (x = 0; x < WIDTH; x++) {
         for (y = 0; y < HEIGHT; y++) {
             if(jewels[x][y] == EMPTY) {
-                printf("Found empty spot at %d,%d", x, y);
                 return 1; 
             }
         }
