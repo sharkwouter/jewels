@@ -7,7 +7,7 @@
 void fill(jewel (*jewels)[HEIGHT]) {
     while(containsEmpty(jewels)) {
         dropJewels(jewels);
-        getMatches(jewels, NULL);
+        // getMatches(jewels, NULL);
     }
 }
 
@@ -58,7 +58,7 @@ match * getMatches(jewel (*jewels)[HEIGHT], unsigned char * count) {
                 for(i = 0; i < matches_found; i++) {
                     tmp[i] = matches[i];
                 }
-                tmp[matches_found] = (match) {x, y};
+                tmp[matches_found] = (match) {x, y, x, y+1, x, y+2};
 
                 jewels[x][y] = EMPTY;
                 jewels[x][y+1] = EMPTY;
@@ -78,7 +78,7 @@ match * getMatches(jewel (*jewels)[HEIGHT], unsigned char * count) {
                 for(i = 0; i < matches_found; i++) {
                     tmp[i] = matches[i];
                 }
-                tmp[matches_found] = (match) {x, y};
+                tmp[matches_found] = (match) {x, y, x+1, y, x+2, y};
 
                 jewels[x][y] = EMPTY;
                 jewels[x+1][y] = EMPTY;

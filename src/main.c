@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
 
+#include "constants.h"
 #include "jewel.h"
 #include "board.h"
 #include "render.h"
@@ -17,10 +19,11 @@ int main(int argc, char** argv) {
         }
     }
 
-    containsEmpty(jewels);
-
-    fill(jewels);
-    renderBoard(jewels);
+    while(containsEmpty(jewels)) {
+        dropJewels(jewels);
+        // getMatches(jewels, NULL);
+        renderBoard(jewels);
+    }
 
     return 0;
 }

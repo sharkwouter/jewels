@@ -1,15 +1,10 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include "constants.h"
 #include "jewel.h"
+#include "match.h"
 
-#define WIDTH 8
-#define HEIGHT 8
-
-typedef struct {
-    unsigned char x;
-    unsigned char y;
-} match;
 
 void fill(jewel (*jewels)[HEIGHT]);
 
