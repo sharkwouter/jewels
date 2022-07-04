@@ -8,6 +8,6 @@ typedef struct {
     unsigned char y2;
     unsigned char x3;
     unsigned char y3;
-} match;
+} Match;
 
 #endif // MATCH_H

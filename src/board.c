@@ -1,100 +1,89 @@
 #include "board.h"
+#include "render.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void fill(jewel (*jewels)[HEIGHT]) {
-    while(containsEmpty(jewels)) {
-        dropJewels(jewels);
-        // getMatches(jewels, NULL);
+void fill(Jewel (*jewels)[HEIGHT]) {
+    unsigned char x, y, i, match_count;
+    Match match;
+
+    for (x = 0; x < WIDTH; x++) {
+        for (y = 0; y < HEIGHT; y++) {
+            jewels[x][y] = (Jewel) (rand() % (NUMBER_OF_COLORS));
+        }
+    }
+    
+    while(getMatch(jewels, NULL)) {
+        while(getMatch(jewels, &match)) {
+            jewels[match.x1][match.y1] = EMPTY;
+            jewels[match.x2][match.y2] = EMPTY;
+            jewels[match.x3][match.y3] = EMPTY;
+        }
+        while(containsEmpty(jewels)) {
+            dropJewels(jewels);
+        }
     }
 }
 
-int swap(jewel (*jewels)[HEIGHT], int x1, int y1, int x2, int y2) {
-    jewel j1;
-    unsigned char match_count;
+int swap(Jewel (*jewels)[HEIGHT], int x1, int y1, int x2, int y2) {
+    Jewel j1;
 
     j1 = jewels[x1][y1];
     jewels[x1][y1] = jewels[x2][y2];
     jewels[x2][y2] = j1;
     
-    match * matches = getMatches(jewels, &match_count);
-
-    if(match_count == 0) {
+    if (!getMatch(jewels, NULL)) {
         j1 = jewels[x1][y1];
         jewels[x1][y1] = jewels[x2][y2];
         jewels[x2][y2] = j1;
+        return 0;
     }
-    return match_count;
+    return 1;
 }
 
-void dropJewels(jewel (*jewels)[HEIGHT]) {
+void dropJewels(Jewel (*jewels)[HEIGHT]) {
     unsigned char x, y;
     for(x = 0; x < WIDTH; x++) {
-        for(y = HEIGHT; y >= 0; y--) {
-            if (jewels[x][y] != EMPTY)
-                continue;
-            
-            if (y == 0) {
-                jewels[x][y] = (jewel) (rand() % (NUMBER_OF_COLORS + 1));
-            } else {
+        for(y = (HEIGHT-1); y > 0; y--) {
+            if (jewels[x][y] == EMPTY) {
                 jewels[x][y] = jewels[x][y-1];
                 jewels[x][y-1] = EMPTY;
             }
         }
+        if (jewels[x][0] == EMPTY) {
+            jewels[x][0] = (Jewel) (rand() % (NUMBER_OF_COLORS));
+        }
     }
 }
 
-match * getMatches(jewel (*jewels)[HEIGHT], unsigned char * count) {
-    match * matches;
-    unsigned char i, matches_found = 0;
-    
-    for (int x = 0; x < WIDTH; x++) {
-        for (int y = 0; y < HEIGHT - 2; y++) {
-            if(jewels[x][y] == jewels[x][y+1] && jewels[x][y] == jewels[x][y+2]) {
-                
-                match * tmp = (match*) malloc((matches_found + 1) * sizeof(match));
-                for(i = 0; i < matches_found; i++) {
-                    tmp[i] = matches[i];
-                }
-                tmp[matches_found] = (match) {x, y, x, y+1, x, y+2};
+int getMatch(Jewel (*jewels)[HEIGHT], Match * match) {
+    unsigned char x, y;
 
-                jewels[x][y] = EMPTY;
-                jewels[x][y+1] = EMPTY;
-                jewels[x][y+2] = EMPTY;
-
-                free(matches);
-                matches = tmp;
-                matches_found++;
+    for (x = 0; x < WIDTH; x++) {
+        for (y = 0; y < HEIGHT - 2; y++) {
+            if(jewels[x][y] != EMPTY && jewels[x][y] == jewels[x][y+1] && jewels[x][y] == jewels[x][y+2]) {
+                if (match != NULL)
+                    *match = (Match) {x, y, x, y+1, x, y+2};
+                return 1;
             }
         }
     }
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH - 2; x++) {
-            if(jewels[x][y] == jewels[x+1][y] && jewels[x][y] == jewels[x+2][y]) {
-                
-                match * tmp = (match*) malloc((matches_found + 1) * sizeof(match));
-                for(i = 0; i < matches_found; i++) {
-                    tmp[i] = matches[i];
-                }
-                tmp[matches_found] = (match) {x, y, x+1, y, x+2, y};
-
-                jewels[x][y] = EMPTY;
-                jewels[x+1][y] = EMPTY;
-                jewels[x+2][y] = EMPTY;
-
-                free(matches);
-                matches = tmp;
-                matches_found++;
+    for (y = 0; y < HEIGHT; y++) {
+        for (x = 0; x < WIDTH - 2; x++) {
+            if(jewels[x][y] != EMPTY && jewels[x][y] == jewels[x+1][y] && jewels[x][y] == jewels[x+2][y]) {
+                if (match != NULL)
+                    *match = (Match) {x, y, x+1, y, x+2, y};
+                return 1;
             }
         }
     }
 
-    return matches;
+    return 0;
 }
 
-int containsEmpty(jewel (*jewels)[HEIGHT]) {
+int containsEmpty(Jewel (*jewels)[HEIGHT]) {
     unsigned char x, y;
 
     for (x = 0; x < WIDTH; x++) {

@@ -1,17 +1,16 @@
 #ifndef JEWEL_H
 #define JEWEL_H
 
-#define NUMBER_OF_COLORS 7
-
 typedef enum {
-    EMPTY,
     RED,
     ORANGE,
     YELLOW,
     GREEN,
     BLUE,
     INDIGO,
-    PURPLE
-} jewel;
+    PURPLE,
+    NUMBER_OF_COLORS,
+    EMPTY
+} Jewel;
 
 #endif // JEWEL_H

@@ -6,14 +6,15 @@
 #include "match.h"
 
 
-void fill(jewel (*jewels)[HEIGHT]);
+void fill(Jewel (*jewels)[HEIGHT]);
 
-int swap(jewel (*jewels)[HEIGHT], int x1, int y1, int x2, int y2);
+int swap(Jewel (*jewels)[HEIGHT], int x1, int y1, int x2, int y2);
 
-void dropJewels(jewel (*jewels)[HEIGHT]);
+void dropJewels(Jewel (*jewels)[HEIGHT]);
 
-match * getMatches(jewel (*jewels)[HEIGHT], unsigned char * count);
+int getMatch(Jewel (*jewels)[HEIGHT], Match * match);
 
-int containsEmpty(jewel (*jewels)[HEIGHT]);
+
+int containsEmpty(Jewel (*jewels)[HEIGHT]);
 
 #endif // BOARD_H
