@@ -28,6 +28,11 @@ int main(int argc, char** argv) {
         start_frame = SDL_GetTicks();
         renderBoard(jewels, x, y);
         if(!containsEmpty(jewels)) {
+            if (isImpossible(jewels)) {
+                renderFinale(score);
+                running = 0;
+                continue;
+            }
         while(!pollInput(&input) || input == NONE) {
             
         }
@@ -78,10 +83,12 @@ int main(int argc, char** argv) {
         } else {
             animate();
             dropJewels(jewels);
-            old_score = score;
-            score += clearMatches(jewels);
-            if (score != old_score) {
-                renderScore(score);
+            if(!containsEmpty(jewels)) {
+                old_score = score;
+                score += clearMatches(jewels);
+                if (score != old_score) {
+                    renderScore(score);
+                }
             }
         }
     }

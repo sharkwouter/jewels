@@ -95,3 +95,7 @@ void animate() {
 void renderScore(unsigned int score) {
     printf("Score: %d\n", score);
 }
+
+void renderFinale(unsigned int score) {
+    printf("No more moves, game over!\nFinal score: %d\n", score);
+}

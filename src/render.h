@@ -15,4 +15,6 @@ void animate();
 
 void renderScore(unsigned int score);
 
+void renderFinale(unsigned int score);
+
 #endif // RENDER_H

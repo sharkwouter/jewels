@@ -125,3 +125,34 @@ int containsEmpty(Jewel (*jewels)[HEIGHT]) {
     }
     return 0;
 }
+
+int isImpossible(Jewel (*jewels)[HEIGHT]) {
+    unsigned char x, y;
+
+    for (x = 0; x < WIDTH; x++) {
+        for (y = 0; y < HEIGHT - 2; y++) {
+            if (jewels[x][y] == EMPTY)
+                return 0;
+            if (jewels[x][y] == jewels[x][y+1]) {
+                if (x > 0 && jewels[x-1][y+2] == jewels[x][y])
+                    return 0;
+                if (x < WIDTH-2 && jewels[x+1][y+2] == jewels[x][y])
+                    return 0;
+            }
+        }
+    }
+    for (y = 0; y < HEIGHT; y++) {
+        for (x = 0; x < WIDTH - 2; x++) {
+            if (jewels[x][y] == EMPTY)
+                return 0;
+            if (jewels[x][y] == jewels[x+1][y]) {
+                if (y > 0 && jewels[x+2][y-1] == jewels[x][y])
+                    return 0;
+                if (y < HEIGHT-2 && jewels[x+2][y+1] == jewels[x][y])
+                    return 0;
+            }
+        }
+    }
+
+    return 1;
+}
