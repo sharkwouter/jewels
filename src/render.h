@@ -5,9 +5,13 @@
 #include "match.h"
 #include "constants.h"
 
+void initRenderer();
+
+void closeRenderer();
+
 void renderBoard(Jewel (*jewels)[HEIGHT], unsigned char x_pos, unsigned char y_pos);
 
-void animateMatch(Match match);
+void animate();
 
 void renderScore(unsigned int score);
 

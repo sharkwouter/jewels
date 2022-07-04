@@ -83,6 +83,36 @@ int getMatch(Jewel (*jewels)[HEIGHT], Match * match) {
     return 0;
 }
 
+int clearMatches(Jewel (*jewels)[HEIGHT]) {
+    unsigned char x, y, i, count = 0;
+    Match matches[96];
+
+    for (x = 0; x < WIDTH; x++) {
+        for (y = 0; y < HEIGHT - 2; y++) {
+            if(jewels[x][y] != EMPTY && jewels[x][y] == jewels[x][y+1] && jewels[x][y] == jewels[x][y+2]) {
+                matches[count] = (Match) {x, y, x, y+1, x, y+2};
+                count++;
+            }
+        }
+    }
+    for (y = 0; y < HEIGHT; y++) {
+        for (x = 0; x < WIDTH - 2; x++) {
+            if(jewels[x][y] != EMPTY && jewels[x][y] == jewels[x+1][y] && jewels[x][y] == jewels[x+2][y]) {
+                matches[count] = (Match) {x, y, x+1, y, x+2, y};
+                count++;
+            }
+        }
+    }
+
+    for(i = 0; i < count; i++) {
+        jewels[matches[i].x1][matches[i].y1] = EMPTY;
+        jewels[matches[i].x2][matches[i].y2] = EMPTY;
+        jewels[matches[i].x3][matches[i].y3] = EMPTY;
+    }
+
+    return count;
+}
+
 int containsEmpty(Jewel (*jewels)[HEIGHT]) {
     unsigned char x, y;
 

@@ -14,6 +14,7 @@ void dropJewels(Jewel (*jewels)[HEIGHT]);
 
 int getMatch(Jewel (*jewels)[HEIGHT], Match * match);
 
+int clearMatches(Jewel (*jewels)[HEIGHT]);
 
 int containsEmpty(Jewel (*jewels)[HEIGHT]);
 

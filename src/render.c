@@ -1,62 +1,96 @@
 #include "render.h"
 
-#include <stdio.h>
+#include <SDL.h>
+
+#define NAME "Jewels"
+#define WINDOW_WIDTH 512
+#define WINDOW_HEIGHT 512
+#define JEWEL_SIZE 64
+#define MARGIN 4
+
+SDL_Window *window = NULL;
+SDL_Renderer *renderer = NULL;
+
+void initRenderer() {
+    SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
+
+    window = SDL_CreateWindow(
+        NAME,
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        SDL_WINDOW_SHOWN
+    );
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+}
+
+void closeRenderer() {
+
+}
 
 void renderBoard(Jewel (*jewels)[HEIGHT], unsigned char x_pos, unsigned char y_pos) {
     unsigned char x, y;
-
-    for (x = 0; x < WIDTH+1; x++) {
-        printf("\e[40m \e[0m");
-    }
-    printf("\e[40m \e[0m\n");
-
-    for (y = 0; y < HEIGHT; y++) {
-        printf("\e[40m \e[0m");
-        for (x = 0; x < WIDTH; x++) {
-            char c = ' ';
-            if (x == x_pos && y == x_pos) {
-                c = 'x';
+    unsigned short rx, ry;
+    
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    for(x = 0, rx = 0; x < WIDTH; x++, rx += JEWEL_SIZE) {
+        for(y = 0, ry = 0; y < HEIGHT; y++, ry += JEWEL_SIZE) {
+            SDL_Rect rect;
+            rect.x = rx;
+            rect.y = ry;
+            rect.w = JEWEL_SIZE;
+            rect.h = JEWEL_SIZE;
+            if (x == x_pos && y == y_pos) {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderFillRect(renderer, &rect);
             }
+
             switch (jewels[x][y])
             {
             case RED:
-                printf("\e[41m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
                 break;
             case ORANGE:
-                printf("\e[47m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
                 break;
             case YELLOW:
-                printf("\e[43m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                 break;
             case GREEN:
-                printf("\e[42m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
                 break;
             case BLUE:
-                printf("\e[44m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
                 break;
             case INDIGO:
-                printf("\e[46m%c\e[0m",c);
+                SDL_SetRenderDrawColor(renderer, 75, 0, 130, 255);
                 break;
             case PURPLE:
-                printf("\e[45m%c\e[0m", c);
+                SDL_SetRenderDrawColor(renderer, 148, 0, 211, 255);
                 break;
-            case NUMBER_OF_COLORS:
-            case EMPTY:
-                printf("\e[40m%c\e[0m", c);
+            default:
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
                 break;
             }
-        }
-        printf("\e[40m \e[0m\n");
-    }
 
-    for (x = 0; x < WIDTH + 1; x++) {
-        printf("\e[40m \e[0m");
+            rect.x += MARGIN;
+            rect.y += MARGIN;
+            rect.w -= MARGIN<<1;
+            rect.h -= MARGIN<<1;
+            SDL_RenderFillRect(renderer, &rect);
+
+        }
     }
-    printf("\e[40m \e[0m\n");
+    SDL_RenderPresent(renderer);
 }
 
 
-void animateMatch(Match match) {}
+void animate() {
+    SDL_Delay(300);
+}
 
 void renderScore(unsigned int score) {
     printf("Score: %d\n", score);
